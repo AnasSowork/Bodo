@@ -18,6 +18,9 @@ interface ToolbarProps {
     redo: () => void;
     canUndo: boolean;
     canRedo: boolean;
+    onPointerDown: (e: any) => void;
+    onPointerUp: (e: any) => void;
+  
 }
 
 export const Toolbar = ({
