@@ -142,7 +142,11 @@ export const Canvas = ({ boardId }: CanvasProps) => {
       },
       [canvasState]
     );
-  
+    const unselectLayer = useMutation(({ self, setMyPresence }) => {
+      if (self.presence.selection.length > 0) {
+        setMyPresence({ selection: [] }, { addToHistory: true });
+      }
+    }, []);
 
     const resizeSelectedLayer = useMutation(
       ({ self, storage }, point: Point) => {
@@ -207,13 +211,35 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         setMyPresence({ cursor: null });
       }, []);
 
+      const handlePointerDown = useCallback(
+        (e: React.PointerEvent) => {
+          const point = pointerEventToCanvasPoint(e, camera);
+    
+          if (canvasState.mode === CanvasMode.Inserting) return;
+    
+          // TODO: Add case for drawing
+          setCanvasState({
+            origin: point,
+            mode: CanvasMode.Pressing,
+          });
+        },
+        [camera, canvasState.mode, setCanvasState]
+      );
+
       const handlePointerUp = useMutation(
         ({}, e) => {
           const point = pointerEventToCanvasPoint(e, camera);
           
     
-          if (canvasState.mode === CanvasMode.Inserting) {
-            insertLayer(canvasState.layerType, point);
+          if (
+            canvasState.mode === CanvasMode.None ||
+            canvasState.mode === CanvasMode.Pressing
+          ) {
+            unselectLayer();
+            setCanvasState({
+              mode: CanvasMode.None,
+            });
+          } else if (canvasState.mode === CanvasMode.Inserting) {            insertLayer(canvasState.layerType, point);
           } else {
             setCanvasState({
               mode: CanvasMode.None,
@@ -221,7 +247,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
           }
           history.resume();
         },
-        [camera, canvasState, history, insertLayer]
+        [camera, canvasState, history, insertLayer, unselectLayer]
       );
 
       const handleLayerPointerDown = useMutation(
@@ -263,6 +289,8 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                 canUndo={canUndo}
                 canRedo={canRedo}
                 onPointerUp={handlePointerUp}
+                onPointerDown={handlePointerDown}
+
 
             />
             <svg
