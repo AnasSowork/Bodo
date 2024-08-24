@@ -23,6 +23,7 @@ import { useCallback, useMemo, useState } from "react";
 import { CursorPresence } from "./cursorPresence";
 import { Info } from "./info";
 import { Participants } from "./participants";
+import { SelectionBox } from "./selectionBox";
 import { Toolbar } from "./toolbar";
 import { LayerPreview } from "./layerPreview";
 
@@ -204,6 +205,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
               selectionColor={layerIdsToColorSelection[layerId]}
             />
           ))}
+          <SelectionBox onResizeHandlePointerDown={() => {}} />
           <CursorPresence />
         </g>
       </svg>
