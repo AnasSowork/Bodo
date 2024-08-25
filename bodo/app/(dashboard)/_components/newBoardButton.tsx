@@ -20,7 +20,7 @@ export function NewBoardButton({ orgId, disabled }: NewBoardButtonProps) {
     create({ orgId, title: "Untitled" })
       .then((id) => {
         toast.success("Board created!");
-        router.push(`/board/${id}`);
+       // router.push(`/board/${id}`);
       })
       .catch(() => toast.error("Failed to create board"));
   };
@@ -30,9 +30,9 @@ export function NewBoardButton({ orgId, disabled }: NewBoardButtonProps) {
       disabled={disabled || isLoading}
       onClick={handleClick}
       className={cn(
-        "col-span-1 aspect-[100/127] bg-blue-600 rounded-lg hover:bg-blue-800 flex flex-col items-center justify-center py-6",
+        "col-span-1 aspect-[100/127] bg-red-500 rounded-lg hover:bg-red-800 flex flex-col items-center justify-center py-6",
         (disabled || isLoading) &&
-          "opacity-65 hover:bg-blue-600 cursor-not-allowed"
+          "opacity-65 hover:bg-red-500 cursor-not-allowed"
       )}
     >
       <div />
