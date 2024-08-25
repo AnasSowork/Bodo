@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { api } from "@/convex/_generated/api";
 import { useApiMutation } from "@/hooks/useApiMutation";
+import { useRenameModal } from "@/store/useRenameModal";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Id } from "@/convex/_generated/dataModel";
-import { useRenameModal } from "@/store/useRenameModal";
 
 export const RenameModal = () => {
   const { mutate: update, isLoading } = useApiMutation(api.board.update);
