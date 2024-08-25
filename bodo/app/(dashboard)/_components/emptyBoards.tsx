@@ -5,8 +5,8 @@ import { api } from "@/convex/_generated/api";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useOrganization } from "@clerk/nextjs";
 import Image from "next/image";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function EmptyBoards() {
   const router = useRouter();
@@ -42,5 +42,5 @@ export function EmptyBoards() {
         </Button>
       </div>
     </div>
-  )
-};
+  );
+}

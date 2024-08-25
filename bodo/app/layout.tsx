@@ -1,9 +1,9 @@
 import { Toaster } from "@/components/ui/sonner";
-import { ModalProvider } from "@/providers/modalProvider";
+import ConvexClientProvider from "@/provders/convexClientProvider";
+import { ModalProvider } from "@/provders/modalProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import ConvexClientProvider from "@/providers/convex-client-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,4 +28,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-};
+}

@@ -4,7 +4,6 @@ import { useOrganization } from "@clerk/nextjs";
 import { EmptyOrg } from "./_components/emptyOrg";
 import { BoardList } from "./_components/boardList";
 
-
 interface DashboardPageProps {
   searchParams: {
     search?: string;
@@ -13,16 +12,15 @@ interface DashboardPageProps {
 }
 
 export default function DashboardPage({ searchParams }: DashboardPageProps) {
-
   const { organization } = useOrganization();
-  
-    return  (
+
+  return (
     <div className="flex-1 h-[calc(100%-80px)] p-6">
-    {!organization ? (
+      {!organization ? (
         <EmptyOrg />
       ) : (
         <BoardList orgId={organization.id} query={searchParams} />
       )}
     </div>
   );
-  }
+}

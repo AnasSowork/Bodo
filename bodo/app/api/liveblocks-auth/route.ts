@@ -6,40 +6,52 @@ import { ConvexHttpClient } from "convex/browser";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 const liveBlocks = new Liveblocks({
-    secret:
-        "sk_prod_IC1eFUIE8XTl7o8q3O4ffsb0N5a9eghhJnmcvZRwBd1n5S2YK17vrFiTHURDerQg",
+  secret: process.env.LIVEBLOCKS_SECRET_KEY!
 });
 
 export async function POST(request: Request) {
-    const authorization = auth();
-    const user = await currentUser();
+  const authorization = auth();
+  const user = await currentUser();
 
-    if (!authorization || !user) {
-        return new Response("Unauthorized", { status: 403 });
-    }
+  console.log("AUTH_INFO", {
+    authorization,
+    user,
+  });
 
-    const { room } = await request.json();
+  if (!authorization || !user) {
+    return new Response("Unauthorized", { status: 403 });
+  }
 
-    const board = await convex.query(api.board.get, { id: room });
+  const { room } = await request.json();
 
+  const board = await convex.query(api.board.get, { id: room });
 
+  console.log("AUTH_INFO", {
+    room,
+    board,
+    boardOrgId: board?.orgId,
+    userOrgId: authorization.orgId,
+  });
 
-    if (board?.orgId !== authorization.orgId) {
-        return new Response("Unauthorized", { status: 403 });
-    }
+  if (board?.orgId !== authorization.orgId) {
+    return new Response("Unauthorized", { status: 403 });
+  }
 
-    const userInfo = {
-        name: user.firstName || "Teammate",
-        picture: user.imageUrl,
-    };
+  const userInfo = {
+    name: user.firstName || "Teammate",
+    picture: user.imageUrl,
+  };
 
-    const session = liveBlocks.prepareSession(user.id, { userInfo });
+  console.log({ userInfo });
 
-    if (room) {
-        session.allow(room, session.FULL_ACCESS);
-    }
+  const session = liveBlocks.prepareSession(user.id, { userInfo });
 
-    const { status, body } = await session.authorize();
+  if (room) {
+    session.allow(room, session.FULL_ACCESS);
+  }
 
-    return new Response(body, { status });
+  const { status, body } = await session.authorize();
+  console.log({ status, body }, "ALLOWED");
+
+  return new Response(body, { status });
 }
